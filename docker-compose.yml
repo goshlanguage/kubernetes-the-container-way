@@ -1,0 +1,21 @@
+version: '3'
+services:
+  etcd:
+    image: quay.io/coreos/etcd:v3.3
+    entrypoint: /scripts/etcd_entry.sh
+    volumes:
+      - ./bin:/scripts/
+      - ./certs:/certs
+    ports:
+      - 2379:2379
+
+  # latest Hyperkube tags can be found here:
+  # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/hyperkube?authuser=2&gcrImageListsize=50
+  kube-apiserver:
+    image: gcr.io/google-containers/hyperkube:v1.10.9
+    command: kube-apiserver --etcd-servers "http://etcd:2379" --insecure-bind-address 0.0.0.0
+    depends_on:
+      - etcd
+    ports:
+      - 8000:8000
+      - 8080:8080

@@ -1,0 +1,17 @@
+{
+    "CN": "system:node:kubelet",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "US",
+            "L": "Austin",
+            "O": "system:nodes",
+            "OU": "Kubernetes the container way",
+            "ST": "TX"
+        }
+    ]
+}
+
