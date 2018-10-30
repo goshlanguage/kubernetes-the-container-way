@@ -2,7 +2,7 @@
 
 set -ex
 
-IP=$(ifconfig|grep en0 -a2|grep inet|cut -d\  -f2)
+IP=$(ifconfig|grep en0 -a2|grep "inet "|cut -d\  -f2)
 
 if [[ ! -f conf/admin.kubeconfig ]]; then
     # Setup kubelet kubeconfig

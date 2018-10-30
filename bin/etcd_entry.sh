@@ -1,5 +1,7 @@
 #!/bin/sh
-IP=$(ifconfig eth0|grep inet|cut -d: -f2|cut -d\  -f1)
+
+# grep "inet " to avoid globbing on ipv6 addresses
+IP=$(ifconfig eth0|grep "inet "|cut -d: -f2|cut -d\  -f1)
 
 etcd --name etcd \
   --cert-file=/certs/kubernetes.pem \

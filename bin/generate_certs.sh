@@ -1,8 +1,9 @@
 #!/bin/bash
 set -ex
 
+# grep "inet " to avoid globbing on ipv6 addresses
+IP=$(ifconfig|grep en0 -a2|grep "inet "|cut -d\  -f2)
 TYPES="admin kube-proxy kube-scheduler kube-controller-manager service-account"
-IP=$(ifconfig|grep en0 -a2|grep inet|cut -d\  -f2)
 
 # First generate a CA so we can self sign the rest of our certificates
 # Don't overwrite certs
@@ -24,7 +25,8 @@ if [[ ! -f certs/kubelet.pem ]]; then
         certs/kubelet-csr.json | cfssljson -bare certs/kubelet
 fi
 
-if [[ ! -f certs/kubelet.pem ]]; then
+# Generate the API server, or the kubernetes, cert.
+if [[ ! -f certs/kubernetes.pem ]]; then
     # The API server also needs hostnames set specifically to properly generate it's certificate
     cfssl gencert \
         -ca=certs/ca.pem \
@@ -32,7 +34,7 @@ if [[ ! -f certs/kubelet.pem ]]; then
         -config=certs/config.json \
         -profile=kubernetes \
         -hostname=10.32.0.1,10.240.0.10,10.240.0.11,10.240.0.12,${IP},127.0.0.1,kubernetes.default \
-        certs/kubelet-csr.json | cfssljson -bare certs/kubelet
+        certs/kubenetes-csr.json | cfssljson -bare certs/kubernetes
 fi
 
 # Don't overwrite certs
