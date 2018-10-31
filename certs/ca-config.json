@@ -12,14 +12,6 @@
                     "server auth",
                     "client auth"
                 ]
-            },
-            "client": {
-                "expiry": "8760h",
-                "usages": [
-                    "signing",
-                    "key encipherment",
-                    "client auth"
-                ]
             }
         }
     }

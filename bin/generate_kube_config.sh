@@ -2,6 +2,7 @@
 
 set -ex
 
+# grep "inet " to avoid globbing on ipv6 addresses
 IP=$(ifconfig|grep en0 -a2|grep "inet "|cut -d\  -f2)
 
 if [[ ! -f conf/admin.kubeconfig ]]; then

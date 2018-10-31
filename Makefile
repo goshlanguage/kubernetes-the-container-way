@@ -10,3 +10,4 @@ clean:
 	rm -f certs/*pem
 	rm -f certs/*csr
 	rm -f conf/*
+	rm -rf /tmp/etcd

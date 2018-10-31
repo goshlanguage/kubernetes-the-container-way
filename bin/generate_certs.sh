@@ -19,7 +19,7 @@ if [[ ! -f certs/kubelet.pem ]]; then
     cfssl gencert \
         -ca=certs/ca.pem \
         -ca-key=certs/ca-key.pem \
-        -config=certs/config.json \
+        -config=certs/ca-config.json \
         -profile=kubernetes \
         -hostname=kubelet,${IP} \
         certs/kubelet-csr.json | cfssljson -bare certs/kubelet
@@ -31,8 +31,8 @@ if [[ ! -f certs/kubernetes.pem ]]; then
     cfssl gencert \
         -ca=certs/ca.pem \
         -ca-key=certs/ca-key.pem \
-        -config=certs/config.json \
-        -hostname="10.32.0.1,10.240.0.10,10.240.0.11,10.240.0.12,${IP},127.0.0.1,kubernetes.default" \
+        -config=certs/ca-config.json \
+        -hostname="etcd,${IP},127.0.0.1,kubernetes.default" \
         -profile=kubernetes \
         certs/kubernetes-csr.json | cfssljson -bare certs/kubernetes
 fi
@@ -47,7 +47,7 @@ if [[ ! -f certs/service-account.pem ]]; then
         cfssl gencert \
             -ca=certs/ca.pem \
             -ca-key=certs/ca-key.pem \
-            -config=certs/config.json \
+            -config=certs/ca-config.json \
             -profile=kubernetes \
             certs/${TYPE}-csr.json | cfssljson -bare certs/${TYPE}
     done

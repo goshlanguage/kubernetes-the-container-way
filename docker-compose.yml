@@ -3,9 +3,11 @@ services:
   etcd:
     image: quay.io/coreos/etcd:v3.3
     entrypoint: /scripts/etcd_entry.sh
+    hostname: etcd
     volumes:
       - ./bin:/scripts/
       - ./certs:/certs
+      - /tmp/etcd:/var/lib/etcd
     ports:
       - 2379:2379
 
