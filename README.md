@@ -55,13 +55,26 @@ curl http://localhost:8080/version
 Didn't get a response from the apiserver? You can get log output from the apiserver with:
 
 ```
+docker-compose logs kube-apiserver
 
+kube-apiserver_1  | I1101 02:22:07.671775       1 cache.go:32] Waiting for caches to sync for autoregister controller
+kube-apiserver_1  | I1101 02:22:07.672359       1 controller_utils.go:1027] Waiting for caches to sync for crd-autoregister controller
+kube-apiserver_1  | W1101 02:22:07.760086       1 lease.go:226] Resetting endpoints for master service "kubernetes" to [192.168.128.3]
+kube-apiserver_1  | I1101 02:22:07.773132       1 cache.go:39] Caches are synced for autoregister controller
+kube-apiserver_1  | I1101 02:22:07.785344       1 cache.go:39] Caches are synced for AvailableConditionController controller
+kube-apiserver_1  | I1101 02:22:07.785514       1 cache.go:39] Caches are synced for APIServiceRegistrationController controller
+kube-apiserver_1  | I1101 02:22:07.786068       1 controller_utils.go:1034] Caches are synced for crd-autoregister controller
+kube-apiserver_1  | I1101 02:22:08.674664       1 storage_scheduling.go:91] created PriorityClass system-node-critical with value 2000001000
+kube-apiserver_1  | I1101 02:22:08.679688       1 storage_scheduling.go:91] created PriorityClass system-cluster-critical with value 2000000000
+kube-apiserver_1  | I1101 02:22:08.679925       1 storage_scheduling.go:100] all system priority classes are created successfully or already exist.
 ```
+
+Try the same while replacing kube-apiserver with etcd to see more about what etcd is doing.
 
 TODO:
 
-[] Setup etcd cluster w/ TLS
-[] Configure Kubernetes apiserver to use TLS for etcd
+- [] Setup etcd cluster w/ TLS
+- [] Configure Kubernetes apiserver to use TLS for etcd
 
 # ETCD
 
