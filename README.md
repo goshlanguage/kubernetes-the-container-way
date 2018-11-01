@@ -76,7 +76,7 @@ TODO:
 - [] Setup etcd cluster w/ TLS
 - [] Configure Kubernetes apiserver to use TLS for etcd
 
-# ETCD
+# etcd
 
 etcd starts up with [bin/etcd_entry.sh](bin/etcd_entry.sh).
 
