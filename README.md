@@ -50,6 +50,31 @@ curl http://localhost:8080/version
 }%
 ```
 
+To see a full list of available API endpoints, you can run:
+```
+curl http://localhost:8080/
+{
+  "paths": [
+    "/api",
+    "/api/v1",
+    "/apis",
+    "/apis/",
+    "/apis/admissionregistration.k8s.io",
+    "/apis/admissionregistration.k8s.io/v1beta1",
+    "/apis/apiextensions.k8s.io",
+    "/apis/apiextensions.k8s.io/v1beta1",
+    "/apis/apiregistration.k8s.io",
+    "/apis/apiregistration.k8s.io/v1",
+    "/apis/apiregistration.k8s.io/v1beta1",
+    "/apis/apps",
+    "/apis/apps/v1",
+    "/apis/apps/v1beta1",
+    "/apis/apps/v1beta2",
+[TRUNCATED]
+```
+
+To learn more about the kubernetes apiserver, see: [The Kubernetes API](https://kubernetes.io/docs/concepts/overview/kubernetes-api/)
+
 # Debugging
 
 Didn't get a response from the apiserver? You can get log output from the apiserver with:
@@ -91,7 +116,7 @@ Currently, we only have 1 etcd node. Ideally, we'd have no less than 3, but this
 
 ```
 docker-compose exec etcd etcdctl -h
-[truncated]
+[TRUNCATED]
 
 COMMANDS:
 	get			Gets the key or a range of keys
@@ -142,7 +167,7 @@ COMMANDS:
 	check perf		Check the performance of the etcd cluster
 	help			Help about any command
 
-    [truncated]
+    [TRUNCATED]
 ```
 
 To see a comprehensive guide for interacting with etcd, see: [CoreOS - Interacting with etcd](https://coreos.com/etcd/docs/latest/dev-guide/interacting_v3.html).
@@ -159,7 +184,7 @@ docker-compose exec etcd etcdctl get / --prefix --keys-only
 /registry/apiregistration.k8s.io/apiservices/v1.batch
 /registry/apiregistration.k8s.io/apiservices/v1.networking.k8s.io
 /registry/apiregistration.k8s.io/apiservices/v1.rbac.authorization.k8s.io
-[truncated]
+[TRUNCATED]
 ```
 
 We can get more information about any key we want to inspect with `etcdctl get`. In this example, let's take a look at the data kubernetes stores for the network:
