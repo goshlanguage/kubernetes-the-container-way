@@ -2,7 +2,7 @@ up:
 	./bin/generate_certs.sh
 	./bin/generate_kube_config.sh
 	./bin/generate_encryption.sh
-	docker-compose up
+	docker-compose up -d
 
 clean:
 	docker-compose down

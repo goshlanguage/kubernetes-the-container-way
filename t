@@ -1,0 +1,2 @@
+{"kind":"APIService","apiVersion":"apiregistration.k8s.io/v1beta1","metadata":{"name":"v1.networking.k8s.io","uid":"ee4a33f3-dd7c-11e8-b652-0242c0a88003","creationTimestamp":"2018-11-01T02:22:07Z","labels":{"kube-aggregator.kubernetes.io/automanaged":"onstart"}},"spec":{"service":null,"group":"networking.k8s.io","version":"v1","groupPriorityMinimum":17200,"versionPriority":15},"status":{"conditions":[{"type":"Available","status":"True","lastTransitionTime":"2018-11-01T02:22:07Z","reason":"Local","message":"Local APIServices are always available"}]}}
+
