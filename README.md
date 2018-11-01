@@ -2,15 +2,26 @@
 
 This guide is inspired by Kelsey Hightower's [Kubernetes the hard way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 
-It includes a docker-compose file and a Makefile to aide in quickly getting up and running so you can get familiar with etcd, and the 5 services that make kubernetes work.
+It includes a docker-compose file and a Makefile to aide in quickly getting up and running so you can get familiar with etcd, and the 5 services that make kubernetes work. These 5 services can be broken into two primary components:
 
-These core services are:
+The Kubernetes Control Plane:
+- etcd
+- apiserver
+- controller manager
+- scheduler
 
+Worker Node components:
+- kubelet
+- proxy
+
+Together, these core services are:
+
+- etcd
 - apiserver
 - controller
-- proxy
 - scheduler
 - kubelet
+- proxy
 
 All of their respective binaries are packaged in a docker container from google called `hyperkube`, which can be found here:
 https://console.cloud.google.com/gcr/images/google-containers/US/hyperkube?gcrImageListsize=30
@@ -27,7 +38,7 @@ kubelet
 kubectl
 ```
 
-We can bring up etcd, and the kubernetes api server by running:
+We can bring up etcd, and the kubernetes apiserver by running:
 
 ```
 make up
@@ -237,3 +248,22 @@ docker-compose exec etcd etcdctl get /registry/apiregistration.k8s.io/apiservice
 If you're familiar with writing kubernetes manifests, this should look very familiar to you.
 
 https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/
+
+# kube-controller-manager
+
+If you've ever wondered how kubernetes services know what kind of load balancer to provision, let's take a look at the kube-controller-manager help text.
+
+```
+docker run --rm gcr.io/google-containers/hyperkube:v1.12.2 kube-controller-manager -h
+[TRUNCATED]
+
+Usage:
+  kube-controller-manager [flags]
+
+Generic flags:
+
+      --allocate-node-cidrs                    Should CIDRs for Pods be allocated and set on the cloud provider.
+      --cidr-allocator-type string             Type of CIDR allocator to use (default "RangeAllocator")
+      --cloud-config string                    The path to the cloud provider configuration file. Empty string for no configuration file.
+      --cloud-provider string                  The provider for cloud services. Empty string for no provider.
+```
