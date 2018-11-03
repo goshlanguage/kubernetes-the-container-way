@@ -32,9 +32,21 @@ if [[ ! -f certs/kubernetes.pem ]]; then
         -ca=certs/ca.pem \
         -ca-key=certs/ca-key.pem \
         -config=certs/ca-config.json \
-        -hostname="etcd,${IP},127.0.0.1,kubernetes.default" \
+        -hostname="etcd-0,${IP},127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster.local" \
         -profile=kubernetes \
         certs/kubernetes-csr.json | cfssljson -bare certs/kubernetes
+fi
+
+# Generate the etcd cert.
+if [[ ! -f certs/etcd.pem ]]; then
+    # The etcd server also needs hostnames set specifically to properly generate it's certificate
+    cfssl gencert \
+        -ca=certs/ca.pem \
+        -ca-key=certs/ca-key.pem \
+        -config=certs/ca-config.json \
+        -hostname="etcd-0,etcd-1,etcd-2,${IP},127.0.0.1" \
+        -profile=kubernetes \
+        certs/etcd-csr.json | cfssljson -bare certs/etcd
 fi
 
 # Don't overwrite certs
