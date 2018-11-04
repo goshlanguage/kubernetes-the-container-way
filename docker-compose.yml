@@ -2,7 +2,7 @@ version: '3'
 services:
   etcd-0:
     image: quay.io/coreos/etcd:v3.3
-    entrypoint: /scripts/etcd_entry.sh
+    entrypoint: /scripts/etcd_entrypoint.sh
     environment:
       - ETCDCTL_API=3
     hostname: etcd-0
@@ -16,11 +16,15 @@ services:
   # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/hyperkube?authuser=2&gcrImageListsize=50
   kube-apiserver:
     image: gcr.io/google-containers/hyperkube:v1.12.2
-    command: kube-apiserver --etcd-servers "http://etcd-0:2379" --insecure-bind-address 0.0.0.0
+    entrypoint: /scripts/apiserver_entrypoint.sh
     depends_on:
       - etcd-0
     ports:
       - 8080:8080
+    volumes:
+      - ./bin:/scripts
+      - ./certs:/certs
+      - ./conf:/conf
     network_mode: host
 
   kube-controller-manager:
@@ -36,6 +40,7 @@ services:
       - etcd-0
     volumes:
       - ./conf:/conf
+      - ./bin:/scripts
     network_mode: host
 
 
