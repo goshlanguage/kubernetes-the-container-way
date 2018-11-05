@@ -47,41 +47,21 @@ make up
 This invokes docker-compose up -d after generating certificates. You can confirm your apiserver and etcd are up by making a request to your local apiserver:
 
 ```
-curl http://localhost:8080/version
+curl --cacert certs/ca.pem https://127.0.0.1:6443/
 {
-  "major": "1",
-  "minor": "12",
-  "gitVersion": "v1.12.2",
-  "gitCommit": "17c77c7898218073f14c8d573582e8d2313dc740",
-  "gitTreeState": "clean",
-  "buildDate": "2018-10-24T06:43:59Z",
-  "goVersion": "go1.10.4",
-  "compiler": "gc",
-  "platform": "linux/amd64"
-}%
-```
+  "kind": "Status",
+  "apiVersion": "v1",
+  "metadata": {
 
-To see a full list of available API endpoints, you can run:
-```
-curl http://localhost:8080/
-{
-  "paths": [
-    "/api",
-    "/api/v1",
-    "/apis",
-    "/apis/",
-    "/apis/admissionregistration.k8s.io",
-    "/apis/admissionregistration.k8s.io/v1beta1",
-    "/apis/apiextensions.k8s.io",
-    "/apis/apiextensions.k8s.io/v1beta1",
-    "/apis/apiregistration.k8s.io",
-    "/apis/apiregistration.k8s.io/v1",
-    "/apis/apiregistration.k8s.io/v1beta1",
-    "/apis/apps",
-    "/apis/apps/v1",
-    "/apis/apps/v1beta1",
-    "/apis/apps/v1beta2",
-[TRUNCATED]
+  },
+  "status": "Failure",
+  "message": "forbidden: User \"system:anonymous\" cannot get path \"/\"",
+  "reason": "Forbidden",
+  "details": {
+
+  },
+  "code": 403
+}
 ```
 
 To learn more about the kubernetes apiserver, see: [The Kubernetes API](https://kubernetes.io/docs/concepts/overview/kubernetes-api/)
@@ -105,22 +85,17 @@ kube-apiserver_1  | I1101 02:22:08.679688       1 storage_scheduling.go:91] crea
 kube-apiserver_1  | I1101 02:22:08.679925       1 storage_scheduling.go:100] all system priority classes are created successfully or already exist.
 ```
 
-Try the same while replacing kube-apiserver with etcd to see more about what etcd is doing.
-
-TODO:
-
-- [] Setup etcd cluster w/ TLS
-- [] Configure Kubernetes apiserver to use TLS for etcd
+Try `docker-compose logs etcd-0` to see more about what etcd is doing.
 
 # etcd
 
-etcd starts up with [bin/etcd_entry.sh](bin/etcd_entry.sh).
+etcd starts up with [bin/etcd_entrypoint.sh](bin/etcd_entrypoint.sh).
 
 To test the health of your cluster, run:
 
 ```
 docker-compose exec etcd etcdctl member list
-1dc00bcbf8c1a1fc: name=etcd peerURLs=http://192.168.112.2:2380 clientURLs=http://192.168.112.2:2379 isLeader=true
+1dc00bcbf8c1a1fc: name=etcd peerURLs=https://192.168.112.2:2380 clientURLs=https://192.168.112.2:2379 isLeader=true
 ```
 
 Currently, we only have 1 etcd node. Ideally, we'd have no less than 3, but this does allow us to explore the data stored in etcd. _NOTE_: We set `ETCDCTL_API=3` in [docker-compose.yml](docker-compose.yml) so that etcdctl uses the version 3 etcd api. You can see a list of available functions with the help flag:
@@ -266,4 +241,32 @@ Generic flags:
       --cidr-allocator-type string             Type of CIDR allocator to use (default "RangeAllocator")
       --cloud-config string                    The path to the cloud provider configuration file. Empty string for no configuration file.
       --cloud-provider string                  The provider for cloud services. Empty string for no provider.
+```
+
+# Taking a Tour
+
+Now that we have bits of the control plane up, let's take a tour of the API. To do this, we'll need to make sure our default service token exists, fetch this token, then compose our curl command to use our token:
+
+```sh
+kubectl get secret
+NAME                  TYPE                                  DATA      AGE
+default-token-rv6xh   kubernetes.io/service-account-token   3         19s
+
+TOKEN=$(kubectl describe secret $(kubectl get secrets | grep default | cut -f1 -d ' ') | grep -E '^token' | cut -f2 -d':' | tr -d '\t')
+
+curl https://127.0.0.1:6443/api/v1 --header "Authorization: Bearer $TOKEN" --insecure|head
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  9438    0  9438    0     0   200k      0 --:--:-- --:--:-- --:--:--  204k
+{
+  "kind": "APIResourceList",
+  "groupVersion": "v1",
+  "resources": [
+    {
+      "name": "bindings",
+      "singularName": "",
+      "namespaced": true,
+      "kind": "Binding",
+      "verbs": [
 ```
