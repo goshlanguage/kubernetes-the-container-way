@@ -6,7 +6,6 @@ set -e
 # grep "inet " to avoid globbing on ipv6 addresses
 IP=$(ip -4 a show dev eth0|grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b"|head -1)
 CIDR=$(echo ${IP}|awk -F\. '{print $1"."$2"."$3".0/24"}')
-HOSTNAME=$(hostname)
 
 kube-apiserver \
         --etcd-servers "https://etcd-0:2379" \

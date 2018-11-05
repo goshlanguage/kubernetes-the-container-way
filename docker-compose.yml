@@ -10,7 +10,6 @@ services:
       - ./bin:/scripts/
       - ./certs:/certs
       - /tmp/etcd:/var/lib/etcd
-    network_mode: host
 
   # latest Hyperkube tags can be found here:
   # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/hyperkube?authuser=2&gcrImageListsize=50
@@ -20,27 +19,20 @@ services:
     depends_on:
       - etcd-0
     ports:
-      - 8080:8080
+      - 6443:6443
     volumes:
       - ./bin:/scripts
       - ./certs:/certs
       - ./conf:/conf
-    network_mode: host
 
   kube-controller-manager:
     image: gcr.io/google-containers/hyperkube:v1.12.2
-    command: |
-      kube-controller-manager \
-        --address=0.0.0.0 \
-        --cluster-name=kubernetes \
-        --kubeconfig=/conf/kube-controller-manager.yaml \
-        --leader-elect=true \
-        --v=2
+    entrypoint: /scripts/controller-manager.sh
     depends_on:
       - etcd-0
     volumes:
+      - ./certs:/certs
       - ./conf:/conf
       - ./bin:/scripts
-    network_mode: host
 
 

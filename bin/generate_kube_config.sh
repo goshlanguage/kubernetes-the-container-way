@@ -50,7 +50,7 @@ if [[ ! -f conf/admin.yaml ]]; then
     kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=certs/ca.pem \
     --embed-certs=true \
-    --server=http://kube-apiserver:8080 \
+    --server=https://kube-apiserver:6443 \
     --kubeconfig=conf/kube-controller-manager.yaml
 
     kubectl config set-credentials system:kube-controller-manager \
