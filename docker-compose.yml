@@ -20,7 +20,6 @@ services:
       - etcd-0
     ports:
       - 6443:6443
-      - 8080:8080
     volumes:
       - ./bin:/scripts
       - ./certs:/certs
