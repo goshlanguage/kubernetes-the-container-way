@@ -24,6 +24,6 @@ logs:
 	echo "\033[0;32m### API Logs: ###\033[0m\n"
 	docker-compose logs kube-apiserver|tail
 	echo "\033[0;32m### kube controller-manager Logs: ###\033[0m\n"
-	docker-compose logs kube-conrtoller-manager|tail
+	docker-compose logs kube-controller-manager|tail
 	echo "\033[0;32m### kube-scheduler Logs: ###\033[0m\n"
 	docker-compose logs kube-scheduler|tail
