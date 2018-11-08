@@ -34,3 +34,13 @@ services:
       - ./bin:/scripts
       - ./certs:/certs
       - ./conf:/conf
+
+  kube-scheduler:
+    image: gcr.io/google-containers/hyperkube:v1.12.2
+    entrypoint:  /scripts/kube-scheduler-entrypoint.sh
+    depends_on:
+      - etcd-0
+    volumes:
+      - ./bin:/scripts
+      - ./certs:/certs
+      - ./conf:/conf
