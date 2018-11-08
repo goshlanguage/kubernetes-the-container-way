@@ -3,5 +3,5 @@
 set -e
 
 kube-scheduler \
-        --config=/conf/kube-scheduler-config.yaml \
+        --config=/conf/kube-scheduler.yaml \
         --v=2

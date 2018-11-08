@@ -24,6 +24,7 @@ services:
       - ./bin:/scripts
       - ./certs:/certs
       - ./conf:/conf
+      - ./kubeconfig:/kubeconfig
 
   kube-controller-manager:
     image: gcr.io/google-containers/hyperkube:v1.12.2
@@ -34,13 +35,15 @@ services:
       - ./bin:/scripts
       - ./certs:/certs
       - ./conf:/conf
+      - ./kubeconfig:/kubeconfig
 
   kube-scheduler:
     image: gcr.io/google-containers/hyperkube:v1.12.2
-    entrypoint:  /scripts/kube-scheduler-entrypoint.sh
+    entrypoint: /scripts/kube-scheduler-entrypoint.sh
     depends_on:
       - etcd-0
     volumes:
       - ./bin:/scripts
       - ./certs:/certs
       - ./conf:/conf
+      - ./kubeconfig:/kubeconfig
