@@ -1,17 +1,29 @@
 up:
 	./bin/generate_certs.sh
-	./bin/generate_kube_config.sh
+	./bin/generate_kubeconfigs.sh
 	./bin/generate_encryption.sh
 	docker-compose up -d
-	mv ~/.kube/config{,.bak}
-	cp conf/admin.yaml ~/.kube/config
 
 clean:
 	docker-compose down
 	docker-compose rm -f
 	rm -f certs/*pem
 	rm -f certs/*csr
-	rm -f conf/*
+	rm -f kubeconfig/*
 	rm -rf /tmp/etcd
-	rm -f ~/.kube/config
-	mv ~/.kube/config{.bak,}
+
+conf:
+	mv ~/.kube/kubeconfig{,.bak}
+	cp kubeconfig/admin.yaml ~/.kube/config
+
+status:
+	kubectl --kubeconfig ./kubeconfig/admin.yaml get componentstatuses
+	kubectl --kubeconfig ./kubeconfig/admin.yaml get all --all-namespaces
+
+logs:
+	echo "\033[0;32m### API Logs: ###\033[0m\n"
+	docker-compose logs kube-apiserver|tail
+	echo "\033[0;32m### kube controller-manager Logs: ###\033[0m\n"
+	docker-compose logs kube-controller-manager|tail
+	echo "\033[0;32m### kube-scheduler Logs: ###\033[0m\n"
+	docker-compose logs kube-scheduler|tail
