@@ -17,4 +17,13 @@ conf:
 	cp kubeconfig/admin.yaml ~/.kube/config
 
 status:
-	kubectl get componentstatuses --kubeconfig ./kubeconfig/admin.yaml
+	kubectl --kubeconfig ./kubeconfig/admin.yaml get componentstatuses
+	kubectl --kubeconfig ./kubeconfig/admin.yaml get all --all-namespaces
+
+logs:
+	echo "\033[0;32m### API Logs: ###\033[0m\n"
+	docker-compose logs kube-apiserver|tail
+	echo "\033[0;32m### kube controller-manager Logs: ###\033[0m\n"
+	docker-compose logs kube-conrtoller-manager|tail
+	echo "\033[0;32m### kube-scheduler Logs: ###\033[0m\n"
+	docker-compose logs kube-scheduler|tail
