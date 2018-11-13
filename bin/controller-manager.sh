@@ -13,7 +13,7 @@ kube-controller-manager \
   --cluster-name=kubernetes \
   --cluster-signing-cert-file=/certs/ca.pem \
   --cluster-signing-key-file=/certs/ca-key.pem \
-  --kubeconfig=/conf/kube-controller-manager.yaml \
+  --kubeconfig=/kubeconfig/kube-controller-manager.yaml \
   --leader-elect=true \
   --root-ca-file=/certs/ca.pem \
   --service-account-private-key-file=/certs/service-account-key.pem \

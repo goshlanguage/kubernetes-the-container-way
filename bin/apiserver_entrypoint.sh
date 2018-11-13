@@ -24,9 +24,8 @@ kube-apiserver \
         --etcd-cafile=/certs/ca.pem \
         --etcd-certfile=/certs/etcd.pem \
         --etcd-keyfile=/certs/etcd-key.pem \
-        --etcd-servers=https://etcd-0:2380 \
         --event-ttl=1h \
-        --experimental-encryption-provider-config=/conf/encryption-config.yaml \
+        --experimental-encryption-provider-config=/kubeconfig/encryption-config.yaml \
         --kubelet-certificate-authority=/certs/ca.pem \
         --kubelet-client-certificate=/certs/kubernetes.pem \
         --kubelet-client-key=/certs/kubernetes-key.pem \
