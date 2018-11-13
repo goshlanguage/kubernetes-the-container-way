@@ -5,12 +5,16 @@ set -ex
 # grep "inet " to avoid globbing on ipv6 addresses
 IP=$(ifconfig|grep en0 -a2|grep "inet "|cut -d\  -f2)
 
+if [ -z ./kubeconfig/ ]; then
+    mkdir -v ./kubeconfig;
+fi
+
 if [[ ! -f kubeconfig/admin.yaml ]]; then
     # Setup kubelet kubeconfig
     kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=certs/ca.pem \
     --embed-certs=true \
-    --server=https://${IP}:6443 \
+    --server=https://kube-apiserver:6443 \
     --kubeconfig=kubeconfig/kubelet.yaml
 
     kubectl config set-credentials system:node:${instance} \
@@ -30,7 +34,7 @@ if [[ ! -f kubeconfig/admin.yaml ]]; then
     kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=certs/ca.pem \
     --embed-certs=true \
-    --server=https://${IP}:6443 \
+    --server=https://kube-apiserver:6443 \
     --kubeconfig=kubeconfig/kube-proxy.yaml
 
     kubectl config set-credentials system:kube-proxy \
@@ -70,7 +74,7 @@ if [[ ! -f kubeconfig/admin.yaml ]]; then
     kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=certs/ca.pem \
     --embed-certs=true \
-    --server=https://127.0.0.1:6443 \
+    --server=https://kube-apiserver:6443 \
     --kubeconfig=kubeconfig/kube-scheduler.yaml
 
     kubectl config set-credentials system:kube-scheduler \
