@@ -2,6 +2,7 @@ up:
 	./bin/generate_certs.sh
 	./bin/generate_kubeconfigs.sh
 	./bin/generate_encryption.sh
+	./bin/rbac_init.sh
 	docker-compose up -d
 
 clean:
